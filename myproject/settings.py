@@ -133,3 +133,28 @@ LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'login'
+
+# environment variables
+import os
+SECRET_KEY = os.environ['SECRET_KEY']
+
+# or local files
+with open('/etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
+
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')
+
+
+from decouple import config, Csv
+import dj_database_url
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
+}
